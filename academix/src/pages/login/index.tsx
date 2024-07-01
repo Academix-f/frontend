@@ -1,11 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import img from '../../assets/img/colorGradient.jpg';
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/General/NavBar/LandingNav";
-
+import LogInApi from "../../services/AuthenticationApi";
 
 const LogIn: React.FC = () => {
   const navigate = useNavigate();
+
+  const [formData , setFormData] = useState({
+    username : "",
+    password : ""
+  })
+
+async function handleSubmit(e : any) {
+  e.preventDefault();
+  try {
+    const response = await LogInApi.logIn(formData.username , formData.password);
+    console.log(response)
+    //redux
+  } catch (error) {
+    console.log("Error in the log in page api call");
+  }
+  
+}
+
+const handleCange = (e : any) => {
+    const {name , value} = e.target;
+    setFormData({ ...formData , [name] : value});
+    
+}
 
   return (
     <>
@@ -38,11 +61,12 @@ const LogIn: React.FC = () => {
                   Username
                 </label>
                 <input
-                  id = "login-password"
-                  className="border border-gray-300 dark:border-gray-600 p-3 rounded-md focus:outline-none focus:border-indigo-600 transition-all duration-300"
+                  id = "login-username"
+                  className="border text-gray-800 border-gray-300 dark:border-gray-600 p-3 rounded-md focus:outline-none focus:border-indigo-600 transition-all duration-300"
                   type="text"
                   name="username"
                   placeholder="Enter your Username"
+                  onChange={ handleCange }
                 />
               </div>
               <div className="flex flex-col pb-4">
@@ -51,15 +75,17 @@ const LogIn: React.FC = () => {
                 </label>
                 <input
                   id = "login-password"
-                  className="border border-gray-300 dark:border-gray-600 p-3 rounded-md focus:outline-none focus:border-indigo-600 transition-all duration-300"
+                  className="border text-gray-800 border-gray-300 dark:border-gray-600 p-3 rounded-md focus:outline-none focus:border-indigo-600 transition-all duration-300"
                   type="password"
                   name="password"
                   placeholder="Enter your password"
+                  onChange={ handleCange }
                 />
               </div>
               <button
                 type="submit"
                 className="bg-indigo-600 text-white font-semibold py-3 mt-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:bg-indigo-700 transition duration-300 w-full"
+                onClick={ handleSubmit }
               >
                 Sign In
               </button>
