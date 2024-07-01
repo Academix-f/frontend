@@ -5,9 +5,7 @@ import Footer from "./components/General/Footer";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <div className="flex flex-col min-h-screen">
-      <App />
-      <Footer />
-    </div>
+    <App />
+    <Footer />
   </React.StrictMode>
 );

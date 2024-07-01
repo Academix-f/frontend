@@ -1,6 +1,7 @@
 import React from "react";
 import img from '../../assets/img/colorGradient.jpg';
 import { useNavigate } from "react-router-dom";
+import Navbar from "../../components/General/NavBar/LandingNav";
 
 
 const LogIn: React.FC = () => {
@@ -8,6 +9,7 @@ const LogIn: React.FC = () => {
 
   return (
     <>
+    <Navbar/>
       <div className="dark">
         <div className="grid grid-cols-1 sm:grid-cols-2 h-screen w-full">
           <div className="dark hidden sm:block relative overflow-hidden animate-slide">
