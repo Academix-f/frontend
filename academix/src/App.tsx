@@ -5,6 +5,7 @@ import LogIn from "../src/pages/login/index";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import SignUp from "./pages/register";
 
+
 function App() {
   return (
     <>

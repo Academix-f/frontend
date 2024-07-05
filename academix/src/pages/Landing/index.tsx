@@ -34,7 +34,7 @@ const Landing: React.FC = () => {
     },
   }));
 
-  return ReactDOM.createPortal(
+  return (
     <>
     <Navbar/>
       <CustomBox component="header">
@@ -115,8 +115,7 @@ const Landing: React.FC = () => {
         </Box>
       </CustomBox>
       <LandingContent/>
-    </>,
-    document.getElementById("head")!
+    </>
   );
 };
 

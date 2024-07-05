@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import img from '../../assets/img/colorGradient.jpg';
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/General/NavBar/LandingNav";
-import LogInApi from "../../services/AuthenticationApi";
+import {LogInApi} from "../../services/AuthenticationApi";
+import "../../styles/others.css"
 
 const LogIn: React.FC = () => {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ const handleCange = (e : any) => {
   return (
     <>
     <Navbar/>
-      <div className="dark">
+      <div className= "dark m-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 h-screen w-full">
           <div className="dark hidden sm:block relative overflow-hidden animate-slide">
             <div className="relative w-full h-full">

@@ -11,9 +11,9 @@ import {
   ListItemText,
 } from "@mui/material";
 // menu
-// import DrawerItem from './DrawerItem';
+import DrawerItem from './DrawerItem';
 // rotas
-import ReactDom from 'react-dom'
+
 import { Link } from "react-router-dom";
 
 
@@ -46,7 +46,7 @@ const itemList = [
 ];
 
 const Navbar: React.FC = () => {
-  return ReactDom.createPortal(
+  return (
     <AppBar
       component="nav"
       position="sticky"
@@ -60,8 +60,9 @@ const Navbar: React.FC = () => {
           ACDMX
         </Typography>
         <Box sx={{ display: { xs: "block", sm: "none" } }}>
-          {/* <DrawerItem />  */}
+          <DrawerItem /> 
         </Box>
+  
         <ListMenu>
           {itemList.map((item) => {
             const { text } = item;
@@ -85,8 +86,7 @@ const Navbar: React.FC = () => {
           })}
         </ListMenu>
       </StyledToolbar>
-    </AppBar> , 
-    document.getElementById("head")!
+    </AppBar>
   );
 };
 

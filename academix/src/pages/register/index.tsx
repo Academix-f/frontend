@@ -1,15 +1,91 @@
-import React from "react";
-import img from '../../assets/img/colorGradient.jpg';
+import React, { useState } from "react";
+import img from "../../assets/img/colorGradient.jpg";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/General/NavBar/LandingNav";
+import Validator from "./FormValidations";
+import signUpData from "./signUpData";
+import { SignUpApi } from "../../services/AuthenticationApi";
+const initialFormData: signUpData = {
+  first_name: "",
+  last_name: "",
+  username: "",
+  password: "",
+  email: "",
+  phone_number: "",
+  student_id: "",
+  academic_year: 0,
+  section: "",
+  department: 1,//for now
+  gender: "",
+  telegram: "",
+  instagram: "",
+  linkedin: "",
+};
 
 const SignUp: React.FC = () => {
   const navigate = useNavigate();
+  const [formData, setFormData] = useState<signUpData>(initialFormData);
+  const [Cpassword , setCpassword] = useState("");
+
+  const handleCpasswordChange =(e : any)=>{
+    const {name , value} = e.target;
+    setCpassword(value);
+  }
+
+  const handleInputChange = (e: any) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+    // console.log(name , value)
+  };
+
+  const apiCall = async (data : signUpData) => {
+    try {
+        const response = await SignUpApi.signUp(data);
+        // navigate("/login")
+        console.log(response);
+        navigate('/login')
+    } catch (error) {
+      console.log("Sign up error , signup page")
+    }   
+  }
+
+  const handleSubmit = (e : any ) =>{
+    e.preventDefault();
+    const validated = new Validator(formData);
+
+    const emptyFieldCheck = validated.allFilled();
+    const emailCheck = validated.isValidEmail();
+    const passwordCheck = validated.confimPassword(Cpassword);
+
+    if(!emptyFieldCheck[0]){
+      //output some message 
+      return;
+    }
+    if(!emailCheck[0]) {
+      //output some message proally tostify
+      return;
+    }
+    if(!passwordCheck[0]){
+      //same
+      return;
+    }
+
+    if(formData.academic_year > 5){
+      //cmon
+      return;
+    }
+
+    apiCall(formData);
+  }
+
 
   return (
     <>
-    <Navbar/>
-      <div className="dark">
+      <Navbar />
+      <div className="dark m-20">
         <div className="grid grid-cols-1 sm:grid-cols-2">
           <div className="dark hidden sm:block relative overflow-hidden animate-slide">
             <div className="relative w-full h-full">
@@ -30,96 +106,142 @@ const SignUp: React.FC = () => {
               </h2>
               <div className="flex flex-col">
                 <input
+                  id="first_name"
                   type="text"
-                  className="w-full px-4 py-3 border border-gray-300 rounded required"
+                  className="w-full px-4 py-3 border text-gray-700 border-gray-300 rounded required"
                   name="first_name"
                   placeholder="First Name"
+                  value={formData.first_name}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="flex flex-col">
                 <input
+                  id="last_name"
                   type="text"
-                  className="w-full px-4 py-3 border border-gray-300 rounded"
+                  className="w-full px-4 py-3 text-gray-700 border border-gray-300 rounded"
                   name="last_name"
                   placeholder="Last Name"
+                  value= {formData.last_name}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="flex flex-col">
                 <input
+                  id="signup-email"
                   type="email"
-                  className="w-full px-4 py-3 border border-gray-300 rounded"
+                  className="w-full px-4 py-3 text-gray-700 border border-gray-300 rounded"
                   name="email"
                   placeholder="Email"
+                  value={formData.email}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="flex flex-col">
                 <input
+                  id="signup-username"
                   type="text"
-                  className="w-full px-4 py-3 border border-gray-300 rounded"
+                  className="w-full px-4 py-3 text-gray-700 border border-gray-300 rounded"
                   name="username"
                   placeholder="Username"
+                  value={formData.username}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="flex flex-col">
                 <input
+                  id="phone-number"
                   type="number"
-                  className="w-full px-4 py-3 border border-gray-300 rounded"
+                  className="w-full px-4 py-3 text-gray-700 border border-gray-300 rounded"
                   name="phone_number"
                   placeholder="Phone Number"
+                  value={formData.phone_number}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="flex flex-col">
                 <input
+                  id="student_id"
                   type="text"
-                  className="w-full px-4 py-3 border border-gray-300 rounded"
+                  className="w-full px-4 py-3 text-gray-700 border border-gray-300 rounded"
                   name="student_id"
                   placeholder="Student ID"
+                  value = {formData.student_id}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="flex flex-col">
                 <input
+                  id="academic_year"
                   type="text"
-                  className="w-full px-4 py-3 border border-gray-300 rounded"
+                  className="w-full px-4 py-3 text-gray-700 border border-gray-300 rounded"
                   name="academic_year"
                   placeholder="Academic Year"
+                  value={formData.academic_year}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="flex flex-col">
                 <input
+                  id="telegram"
                   type="text"
-                  className="w-full px-4 py-3 border border-gray-300 rounded"
+                  className="w-full px-4 py-3 text-gray-700 border border-gray-300 rounded"
                   name="telegram"
-                  placeholder="@telegExample"
+                  placeholder="@telegram"
+                  value={formData.telegram}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="flex flex-col">
                 <input
+                  id="instagram"
                   type="text"
-                  className="w-full px-4 py-3 border border-gray-300 rounded"
+                  className="w-full px-4 py-3 text-gray-700 border border-gray-300 rounded"
                   name="instagram"
-                  placeholder="@instExample"
+                  placeholder="@instagram"
+                  value={formData.instagram}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="flex flex-col">
                 <input
+                  id="linked-in"
                   type="text"
-                  className="w-full px-4 py-3 border border-gray-300 rounded"
+                  className="w-full px-4 py-3 text-gray-700 border border-gray-300 rounded"
                   name="linkedin"
-                  placeholder="linkedin_Example"
+                  placeholder="linkedin"
+                  value={formData.linkedin}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="flex flex-col">
                 <input
+                  id="signup-password"
                   type="password"
-                  className="w-full px-4 py-3 border border-gray-300 rounded"
+                  className="w-full px-4 py-3 text-gray-700 border border-gray-300 rounded"
                   name="password"
                   placeholder="Password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="flex flex-col">
+                <input
+                  id="confirm-password"
+                  type="password"
+                  className="w-full px-4 py-3 text-gray-700 border border-gray-300 rounded"
+                  name="Cpassword"
+                  placeholder="Confirm Password"
+                  value= {Cpassword}
+                  onChange={handleCpasswordChange}
                 />
               </div>
               <div className="flex flex-col">
                 <select
-                  className="w-full px-4 py-3 border border-gray-300 rounded"
+                  className="w-full px-4 py-3 border text-gray-600 border-gray-300 rounded"
                   name="section"
+                  value={formData.section}
+                  onChange={handleInputChange}
                 >
                   <option value="">Select section</option>
                   <option value="A">A</option>
@@ -128,53 +250,40 @@ const SignUp: React.FC = () => {
               </div>
               <div className="relative flex flex-col">
                 <select
-                  className="w-full px-4 py-3 border border-gray-300 rounded"
+                  className="w-full px-4 py-3 text-gray-600 border border-gray-300 rounded"
                   name="department"
+                  value={formData.department}
+                  onChange = {handleInputChange}
+                 
                 >
                   <option value="">Select Department</option>
                 </select>
-                <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                  <svg
-                    className="w-5 h-5 text-gray-400"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 12a2 2 0 100-4 2 2 0 000 4z"
-                      clipRule="evenodd"
-                    />
-                    <path
-                      fillRule="evenodd"
-                      d="M10 0a9.997 9.997 0 00-7.071 2.929A9.997 9.997 0 000 10c0 2.683 1.059 5.207 2.929 7.071A9.997 9.997 0 0010 20c2.683 0 5.207-1.059 7.071-2.929A9.997 9.997 0 0020 10c0-2.683-1.059-5.207-2.929-7.071A9.997 9.997 0 0010 0zM2.929 12.929a7.963 7.963 0 000-5.657A7.963 7.963 0 017.071 4.93a7.963 7.963 0 015.657 0 7.963 7.963 0 010 5.657 7.963 7.963 0 01-5.657 2.829 7.963 7.963 0 01-5.657 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col text-gray-600">
                 <select
-                  className="w-full px-4 py-3 border border-gray-300 rounded"
+                  className="w-full px-4 py-3 text-gray-700 border border-gray-300 rounded"
                   name="gender"
+                  value={formData.gender}
+                  onChange = {handleInputChange}
                 >
                   <option value="">Select Gender</option>
-                  <option value="f">Female</option>
-                  <option value="m">Male</option>
+                  <option value="female">Female</option>
+                  <option value="male">Male</option>
                 </select>
               </div>
               <button
-                type="submit"
-                 className="bg-indigo-600 text-white font-semibold py-3 mt-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:bg-indigo-700 transition duration-300 w-full"
+              type= "submit"
+                className="bg-indigo-600 text-white font-semibold py-3 mt-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:bg-indigo-700 transition duration-300 w-full"
+                onClick = {handleSubmit} 
               >
                 Sign Up
               </button>
-        
+
               <button onClick={() => navigate("/login")}>
-                  <p className="text-indigo-600 cursor-pointer transition-colors duration-300 hover:text-indigo-800">
-                    Already have an account.
-                  </p>
-                </button>
+                <p className="text-indigo-600 cursor-pointer transition-colors duration-300 hover:text-indigo-800">
+                  Already have an account.
+                </p>
+              </button>
             </form>
           </div>
         </div>
